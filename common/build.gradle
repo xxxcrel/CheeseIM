@@ -1,3 +1,4 @@
 dependencies {
     implementation 'org.springframework:spring-context'
+    implementation 'io.netty:netty-all'
 }

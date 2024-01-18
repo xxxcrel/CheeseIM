@@ -1,14 +1,15 @@
 plugins {
     id 'java'
     id 'maven-publish'
-    id 'org.graalvm.buildtools.native' version '0.9.19'
+    id 'org.graalvm.buildtools.native' version '0.9.27'
 }
-ext{
+ext {
     set("springVersion", "6.0.13")
-    set("dubboVersion", "3.2.7")
+    //set("dubboVersion", "3.2.7")
     set("kafkaVersion", "2.8.1")
 }
-allprojects{
+
+allprojects {
     group = 'com.cheeseocean.im'
     version = '1.0.0'
 
@@ -21,9 +22,17 @@ allprojects{
             credentials {
                 username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
                 password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
-            }
+           }
         }
     }
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+            vendor = JvmVendorSpec.ORACLE
+        }
+    }
+
 }
 
 subprojects {
@@ -31,32 +40,34 @@ subprojects {
     apply plugin: 'maven-publish'
 
     dependencies {
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+        testImplementation platform('org.junit:junit-bom:5.9.1')
+        testImplementation 'org.junit.jupiter:junit-jupiter'
         testCompileOnly 'org.projectlombok:lombok:1.18.26'
         testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
 
         implementation enforcedPlatform("org.springframework:spring-framework-bom:$springVersion")
         //spring (based ioc aop)
-        implementation "org.springframework:spring-context"
-        implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
+        //implementation "org.springframework:spring-context"
+        implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.12.5'
         implementation 'ch.qos.logback:logback-core:1.4.9'
         implementation 'ch.qos.logback:logback-classic:1.4.9'
         implementation 'org.slf4j:log4j-over-slf4j:1.7.25'
         implementation 'org.slf4j:jcl-over-slf4j:1.7.25'
+        implementation 'io.netty:netty-all:4.1.68.Final'
 
-        implementation "org.apache.dubbo:dubbo-config-spring:$dubboVersion"
-        implementation "org.apache.dubbo:dubbo-rpc-dubbo:$dubboVersion"
-        implementation "org.apache.dubbo:dubbo-remoting-netty4:$dubboVersion"
-        implementation "org.apache.dubbo:dubbo-serialization-hessian2:$dubboVersion"
-        //nacos-registry
-        implementation "org.apache.dubbo:dubbo-registry-nacos:$dubboVersion"
-        implementation "org.apache.dubbo:dubbo-configcenter-nacos:$dubboVersion"
-        implementation "org.apache.dubbo:dubbo-metadata-report-nacos:$dubboVersion"
-        //zookeeper-registry
-        implementation "org.apache.dubbo:dubbo-registry-zookeeper:$dubboVersion"
-        implementation "org.apache.dubbo:dubbo-configcenter-zookeeper:$dubboVersion"
-        implementation "org.apache.dubbo:dubbo-metadata-report-zookeeper:$dubboVersion"
+        //dubbo rpc
+        //implementation "org.apache.dubbo:dubbo-config-spring:$dubboVersion"
+        //implementation "org.apache.dubbo:dubbo-rpc-dubbo:$dubboVersion"
+        //implementation "org.apache.dubbo:dubbo-remoting-netty4:$dubboVersion"
+        //implementation "org.apache.dubbo:dubbo-serialization-hessian2:$dubboVersion"
+        ////nacos-registry
+        //implementation "org.apache.dubbo:dubbo-registry-nacos:$dubboVersion"
+        //implementation "org.apache.dubbo:dubbo-configcenter-nacos:$dubboVersion"
+        //implementation "org.apache.dubbo:dubbo-metadata-report-nacos:$dubboVersion"
+        ////zookeeper-registry
+        //implementation "org.apache.dubbo:dubbo-registry-zookeeper:$dubboVersion"
+        //implementation "org.apache.dubbo:dubbo-configcenter-zookeeper:$dubboVersion"
+        //implementation "org.apache.dubbo:dubbo-metadata-report-zookeeper:$dubboVersion"
         //lombok
         compileOnly 'org.projectlombok:lombok:1.18.30'
         annotationProcessor 'org.projectlombok:lombok:1.18.30'

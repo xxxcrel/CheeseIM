@@ -1,5 +1,0 @@
-dependencies {
-    implementation project(':common')
-    implementation project(':postoffice')
-    implementation "org.apache.kafka:kafka-clients:${kafkaVersion}"
-}
