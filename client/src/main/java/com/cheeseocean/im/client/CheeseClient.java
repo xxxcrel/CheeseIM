@@ -1,13 +1,14 @@
+
 package com.cheeseocean.im.client;
 
 
-import com.cheeseocean.im.common.codec.CheeseMessageDecoder;
-import com.cheeseocean.im.common.codec.Hessian2ObjectInput;
+import com.cheeseocean.im.common.codec.MessageDecoder;
 import com.cheeseocean.im.common.codec.Hessian2ObjectOutput;
 import com.cheeseocean.im.common.constant.IMConstant;
 import com.cheeseocean.im.common.entity.CheeseMessage;
 import com.cheeseocean.im.common.entity.CheeseRequest;
 import io.netty.bootstrap.Bootstrap;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.channel.*;
@@ -17,7 +18,6 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.MessageToByteEncoder;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -30,6 +30,7 @@ public class CheeseClient {
     MessageHandler messageHandler = new MessageHandler();
 
     Channel channel;
+
 
     public static void main(String[] args) throws InterruptedException {
         CheeseClient client = new CheeseClient();
@@ -52,7 +53,7 @@ public class CheeseClient {
                     protected void initChannel(SocketChannel ch) throws Exception {
                         ch.pipeline()
                                 .addLast(RequestEncoder.INSTANCE)
-                                .addLast(new CheeseMessageDecoder());
+                                .addLast(new MessageDecoder());
 
                     }
                 });
@@ -73,6 +74,7 @@ public class CheeseClient {
 //            CheeseMessage msg = in.readObject(CheeseMessage.class);
 //            log.info("msg.content:{}", msg.getContent());
         } catch (IOException e) {
+
             throw new RuntimeException(e);
         }
 
@@ -91,6 +93,7 @@ public class CheeseClient {
 class RequestEncoder extends MessageToByteEncoder<CheeseRequest> {
 
     public static RequestEncoder INSTANCE = new RequestEncoder();
+
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, CheeseRequest cheeseRequest, ByteBuf byteBuf) throws Exception {
         log.info("encode request:{}", cheeseRequest);
@@ -116,5 +119,7 @@ class MessageHandler extends ChannelDuplexHandler {
         this.ctx = ctx;
         System.out.println("channel Active");
     }
+
+
 
 }
