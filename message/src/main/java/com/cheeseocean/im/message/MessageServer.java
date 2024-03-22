@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @Configuration
 @ComponentScan(basePackages = "com.cheeseocean.im.message")
-@EnableDubbo(scanBasePackages = "com.cheeseocean.im.message.service")
 public class MessageServer {
 
     public static void main(String[] args) {
