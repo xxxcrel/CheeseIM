@@ -1,0 +1,7 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+    implementation 'kafka.clients:kafka-clients:2.8.1'
+}

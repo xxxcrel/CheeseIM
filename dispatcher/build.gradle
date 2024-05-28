@@ -1,0 +1,5 @@
+dependencies {
+    implementation project(':common')
+    implementation project(':gateway')
+    implementation "org.apache.kafka:kafka-clients:${kafkaVersion}"
+}
